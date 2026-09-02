@@ -22,7 +22,7 @@
 <div class="app">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar" style="display:none">
 
     <!-- Excel Import -->
     <div class="section">
@@ -266,6 +266,29 @@
   <!-- Canvas Area -->
   <main class="canvas-wrap" id="canvasWrap">
 
+    <!-- Certificate drop zone (shown on first load, before any template is uploaded) -->
+    <div id="certDropZone" class="cert-drop-zone">
+      <input type="file" id="certFileInput" accept="image/png,image/jpeg,image/webp,image/gif" />
+      <div class="cert-drop-inner">
+        <div class="cert-drop-icon">
+          <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.1">
+            <rect x="3" y="3" width="18" height="18" rx="2.5"/>
+            <path d="M3 16l5-5 4 4 3-3 6 5.5"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+          </svg>
+        </div>
+        <div class="cert-drop-title">Drop your certificate here</div>
+        <div class="cert-drop-sub">Drag &amp; drop or click to browse</div>
+        <div class="cert-drop-formats">PNG &nbsp;·&nbsp; JPG &nbsp;·&nbsp; WebP</div>
+      </div>
+    </div>
+
+    <!-- Change certificate button (shown after a template is loaded) -->
+    <button id="changeTemplateBtn" class="change-template-btn" type="button" title="Upload a different certificate">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      Change Certificate
+    </button>
+
     <!-- Row indicator bar (shown when a specific row is selected for editing) -->
     <div class="row-indicator" id="rowIndicator" style="display:none">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -282,10 +305,10 @@
       </div>
     </div>
 
-    <div class="canvas-container" id="canvasContainer">
+    <div class="canvas-container" id="canvasContainer" style="display:none">
       <canvas id="previewCanvas"></canvas>
     </div>
-    <p class="canvas-hint">
+    <p class="canvas-hint" id="canvasHint" style="display:none">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 8 12 12 14 14"/></svg>
       Drag a column chip from the sidebar onto the canvas — then click any placed field to reposition it
     </p>

@@ -145,6 +145,12 @@
   const btnExitRowEdit      = document.getElementById('btnExitRowEdit');
   const btnResetRowOverride = document.getElementById('btnResetRowOverride');
 
+  const certDropZone      = document.getElementById('certDropZone');
+  const certFileInput     = document.getElementById('certFileInput');
+  const changeTemplateBtn = document.getElementById('changeTemplateBtn');
+  const canvasContainer   = document.getElementById('canvasContainer');
+  const canvasHint        = document.getElementById('canvasHint');
+
   const API_BASE = 'http://localhost:3001';
 
   const emailSubject      = document.getElementById('emailSubject');
@@ -911,6 +917,19 @@
   zoomInBtn.addEventListener('click',  () => { if (zoomIdx < ZOOM_STEPS.length - 1) { zoomIdx++; applyZoom(); } });
   zoomOutBtn.addEventListener('click', () => { if (zoomIdx > 0)                     { zoomIdx--; applyZoom(); } });
 
+  function autoFitZoom() {
+    const wrap = document.getElementById('canvasWrap');
+    const availW = (wrap.clientWidth  || 800) - 48;
+    const availH = (wrap.clientHeight || 600) - 100;
+    const bestScale = Math.min(availW / state.naturalW, availH / state.naturalH, 1.0);
+    let idx = 0;
+    for (let i = 0; i < ZOOM_STEPS.length; i++) {
+      if (ZOOM_STEPS[i] <= bestScale) idx = i;
+    }
+    zoomIdx = idx;
+    applyZoom();
+  }
+
   // ── Typography control changes → update active field ──────────────
   function onTypographyChange() {
     saveActiveFieldTypography();
@@ -1449,6 +1468,66 @@
     emailResultLog.scrollTop = emailResultLog.scrollHeight;
   }
 
+  // ── Certificate image upload ───────────────────────────────────────
+  function showDropZone() {
+    certDropZone.style.display  = '';
+    canvasContainer.style.display = 'none';
+    canvasHint.style.display    = 'none';
+    changeTemplateBtn.classList.remove('visible');
+  }
+
+  function hideDropZone() {
+    certDropZone.style.display    = 'none';
+    canvasContainer.style.display = '';
+    canvasHint.style.display      = '';
+    changeTemplateBtn.classList.add('visible');
+    document.getElementById('sidebar').style.display = '';
+  }
+
+  function loadCertificateImage(file) {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      state.image    = img;
+      state.naturalW = img.naturalWidth;
+      state.naturalH = img.naturalHeight;
+      autoFitZoom();
+      hideDropZone();
+      render();
+      URL.revokeObjectURL(url);
+      toast(`Certificate loaded — ${state.naturalW}×${state.naturalH}px`, 'success');
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      toast('Could not load image file', 'warning');
+    };
+    img.src = url;
+  }
+
+  certDropZone.addEventListener('dragover', e => {
+    e.preventDefault();
+    certDropZone.classList.add('drag-active');
+  });
+
+  certDropZone.addEventListener('dragleave', () => certDropZone.classList.remove('drag-active'));
+
+  certDropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    certDropZone.classList.remove('drag-active');
+    const file = [...e.dataTransfer.files].find(f => f.type.startsWith('image/'));
+    if (!file) { toast('Please drop an image file (PNG, JPG, WebP)', 'warning'); return; }
+    loadCertificateImage(file);
+  });
+
+  certFileInput.addEventListener('change', () => {
+    if (certFileInput.files[0]) {
+      loadCertificateImage(certFileInput.files[0]);
+      certFileInput.value = '';
+    }
+  });
+
+  changeTemplateBtn.addEventListener('click', () => certFileInput.click());
+
   // ── Load template ──────────────────────────────────────────────────
   function loadTemplate() {
     const img = new Image();
@@ -1472,5 +1551,5 @@
   restoreDraft();
   buildTemplateSelect();
   updateRowIndicator();
-  loadTemplate();
+  showDropZone();
 })();

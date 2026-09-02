@@ -1199,3 +1199,105 @@ input[type="range"] {
 .excel-table tbody tr.active.customized td:first-child::after {
   color: var(--accent);
 }
+
+/* ─── Certificate drop zone ───────────────────────── */
+.cert-drop-zone {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  z-index: 10;
+  cursor: pointer;
+}
+
+.cert-drop-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.cert-drop-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 52px 64px;
+  border: 2px dashed var(--border);
+  border-radius: 18px;
+  text-align: center;
+  transition: border-color 0.2s, background 0.2s;
+  pointer-events: none;
+  max-width: 420px;
+}
+
+.cert-drop-zone:hover .cert-drop-inner,
+.cert-drop-zone.drag-active .cert-drop-inner {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.cert-drop-icon {
+  color: var(--text-muted);
+  opacity: 0.45;
+  transition: opacity 0.2s, color 0.2s;
+  line-height: 0;
+}
+
+.cert-drop-zone:hover .cert-drop-icon,
+.cert-drop-zone.drag-active .cert-drop-icon {
+  color: var(--accent);
+  opacity: 1;
+}
+
+.cert-drop-title {
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cert-drop-sub {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: -4px;
+}
+
+.cert-drop-formats {
+  font-size: 11px;
+  color: var(--text-muted);
+  opacity: 0.55;
+  letter-spacing: 0.06em;
+}
+
+/* ─── Change certificate button ───────────────────── */
+.change-template-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 7px 13px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s;
+  z-index: 5;
+}
+
+.change-template-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.change-template-btn.visible {
+  display: flex;
+}
