@@ -101,7 +101,7 @@ Click **Setup SMTP** and fill in:
 | Port | `587` (TLS) or `465` (SSL) |
 | Username | `you@example.com` |
 | Password / App password | `•••••••` |
-| From Name | `Certificate Team` |
+| From Name | `Anish Kumar` |
 
 Click **Test Connection** to verify credentials before saving.
 
@@ -120,7 +120,7 @@ Hi {{firstName}},
 Please find your certificate for {{course}} attached.
 
 Best regards,
-The Team
+Anish Kumar
 ```
 
 `{{firstName}}` is automatically derived from the `name` column (first word). All other `{{columnName}}` variables are replaced per recipient at send time.
